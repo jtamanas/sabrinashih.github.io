@@ -26,7 +26,8 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg);
+  background: linear-gradient(to bottom, #ebdecb 0%, var(--bg) 20%, #dfc3b2 100%);
+  background-attachment: fixed;
   color: var(--text-dark);
   min-height: 100vh;
   display: flex;
@@ -39,7 +40,9 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--bg);
+  background-color: rgba(238, 220, 204, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   width: 100%;
   max-width: 1200px;
   padding: 0.5rem 3rem;
@@ -127,6 +130,7 @@ body {
   padding: 0.75rem 3rem 1rem;
   max-width: 1080px;
   width: 100%;
+  position: relative;
 }
 
 /* ===== Card Base ===== */
@@ -180,7 +184,7 @@ body {
 .card-back {
   transform: rotateY(180deg);
   justify-content: flex-start;
-  padding: 2rem;
+  padding: 4rem 2rem 2rem 2rem;
   visibility: hidden;
   transition: visibility 0s calc(var(--flip-speed) / 2);
 }
@@ -206,6 +210,63 @@ body {
 
 .card-back .card-plus {
   background: rgba(255, 255, 255, 0.2);
+}
+
+/* ===== Card SVG Buttons (Close/Expand) ===== */
+.card-btn-icon {
+  position: absolute;
+  top: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  z-index: 2;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.card-btn-icon:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.card-btn-close {
+  left: 1.5rem;
+}
+
+.card-btn-expand {
+  right: 1.5rem;
+}
+
+.icon-shrink {
+  display: none;
+}
+
+.card.expanded .icon-expand {
+  display: none;
+}
+
+.card.expanded .icon-shrink {
+  display: block !important;
+}
+
+/* Color variant button overrides matching .card-plus */
+.card--sage .card-btn-icon {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--text-sage);
+}
+
+.card--sage .card-btn-icon:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.card--slate .card-btn-icon {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* ===== Card SVG ===== */
@@ -523,6 +584,30 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* ===== Expanded Card Styles ===== */
+.card-grid.has-expanded-card .card:not(.expanded) {
+  pointer-events: none;
+}
+
+.card.expanded {
+  position: absolute;
+  z-index: 50;
+  top: 0.75rem;
+  left: 3rem;
+  right: 3rem;
+  bottom: 0;
+  height: auto;
+  cursor: default;
+}
+
+.card.expanded .card-content {
+  font-size: 1rem;
+}
+
+.card.expanded .card-content h3 {
+  font-size: 1.75rem;
+}
+
 /* ===== Responsive — Tablet ===== */
 @media (max-width: 1024px) {
   .card-grid {
@@ -541,6 +626,16 @@ body {
 
   .card-title {
     font-size: 1.75rem;
+  }
+
+  .card.expanded {
+    position: relative;
+    inset: auto;
+    grid-column: span 2;
+    grid-row: span 2;
+    height: 564px;
+    /* 2 vertical cards (270px) + gap (24px) */
+    z-index: 10;
   }
 }
 
@@ -579,7 +674,7 @@ body {
   }
 
   .card-back {
-    padding: 1.25rem;
+    padding: 3.5rem 1.25rem 1.25rem;
   }
 
   .card-content {
@@ -604,6 +699,28 @@ body {
     left: 1.25rem;
   }
 
+  .card-btn-icon {
+    top: 1rem;
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .card-btn-close {
+    left: 1rem;
+  }
+
+  .card-btn-expand {
+    right: 1rem;
+  }
+
+  .card.expanded {
+    position: relative;
+    inset: auto;
+    grid-column: 1 / -1;
+    height: auto;
+    min-height: 480px;
+    z-index: 10;
+  }
 }
 
 /* ===== Responsive — Small phone ===== */
@@ -619,4 +736,40 @@ body {
   .card--tall {
     height: 252px;
   }
+}
+
+/* ===== View Transitions ===== */
+::view-transition-group(active-card),
+::view-transition-old(active-card),
+::view-transition-new(active-card) {
+  animation-duration: 0.25s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(active-card),
+::view-transition-new(active-card) {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* On expand, hide the old small card and only show the big page view expanding */
+html.is-expanding ::view-transition-old(active-card) {
+  display: none;
+}
+
+html.is-expanding ::view-transition-new(active-card) {
+  animation: none;
+  opacity: 1;
+}
+
+/* On shrink, hide the new small card and only show the big page view shrinking */
+html.is-shrinking ::view-transition-new(active-card) {
+  display: none;
+}
+
+html.is-shrinking ::view-transition-old(active-card) {
+  animation: none;
+  opacity: 1;
 }
