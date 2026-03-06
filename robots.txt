@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sabrinashih.com/sitemap.xml
+Sitemap: https://sabrinashih.github.io/sitemap.xml
