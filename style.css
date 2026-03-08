@@ -17,7 +17,7 @@
   --ice: #CDDCE8;
   --sage: #C4D6CB;
   --slate: #7C9A95;
-  --bg: #EEDCCC;
+  --bg: #faf9f6;
   --text-dark: #1e293b;
   --text-sage: #3d4f4a;
   --text-ice: #3a4a5c;
@@ -39,7 +39,7 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(to bottom, #ebdecb 0%, var(--bg) 20%, #dfc3b2 100%);
+  background: #faf9f6;
   background-attachment: fixed;
   color: var(--text-dark);
   min-height: 100vh;
