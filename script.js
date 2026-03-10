@@ -113,6 +113,60 @@ document.querySelectorAll('.card').forEach(function (card) {
   });
 })();
 
+// Card entrance animation — balloons float up from bottom, staggered left to right
+(function () {
+  var cards = document.querySelectorAll('.card');
+  var grid = document.querySelector('.card-grid');
+  var gridHeader = document.querySelector('.grid-header');
+
+  // Skip animation for reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.remove('cards-loading');
+    return;
+  }
+
+  // Measure card positions while they're in their natural grid spots
+  var gridRect = grid.getBoundingClientRect();
+
+  // Animate grid header with a quick fade-in (visible on desktop only)
+  if (gridHeader) {
+    gridHeader.classList.add('grid-header--entering');
+  }
+
+  // Stagger card float-up based on horizontal position (left-to-right sweep)
+  // Collect unique column positions to scale stagger to actual column count
+  var colXs = [];
+  cards.forEach(function (card) {
+    var cx = Math.round(card.getBoundingClientRect().left);
+    if (colXs.indexOf(cx) === -1) colXs.push(cx);
+  });
+  var numCols = colXs.length;
+  // More columns → wider stagger; 2 cols get a tighter sweep
+  var maxStagger = numCols <= 2 ? 0.18 : 0.5;
+
+  cards.forEach(function (card) {
+    var rect = card.getBoundingClientRect();
+    var cardCenterX = rect.left + rect.width / 2;
+    var normalizedX = (cardCenterX - gridRect.left) / gridRect.width;
+    normalizedX = Math.max(0, Math.min(1, normalizedX));
+    var delay = 0.08 + normalizedX * maxStagger;
+    card.style.setProperty('--enter-delay', delay.toFixed(3) + 's');
+    card.classList.add('card--float-in');
+  });
+
+  // Clean up after all animations settle
+  setTimeout(function () {
+    document.documentElement.classList.remove('cards-loading');
+    cards.forEach(function (card) {
+      card.classList.remove('card--float-in');
+      card.style.removeProperty('--enter-delay');
+    });
+    if (gridHeader) {
+      gridHeader.classList.remove('grid-header--entering');
+    }
+  }, 2000);
+})();
+
 // Show hint pill after 5 seconds, dismiss with bubble-pop on click
 (function () {
   var hint = document.getElementById('hint');
