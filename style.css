@@ -553,6 +553,78 @@ body {
   font-size: 0.95rem;
 }
 
+/* ===== Outreach Sections (Speaking & Workshops) ===== */
+.outreach-cta {
+  font-size: 0.8rem;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.outreach-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.outreach-link:hover {
+  opacity: 0.7;
+}
+
+.outreach-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.outreach-section h4 {
+  font-family: 'Signika Negative', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.outreach-icon {
+  flex-shrink: 0;
+}
+
+.outreach-list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  opacity: 0.9;
+}
+
+.outreach-list li {
+  margin-bottom: 0.4rem;
+}
+
+.outreach-list li strong {
+  font-weight: 600;
+}
+
+.outreach-sublist {
+  list-style: circle;
+  padding-left: 1.25rem;
+  margin-top: 0.2rem;
+}
+
+.outreach-sublist li {
+  margin-bottom: 0.2rem;
+  font-weight: 400;
+}
+
+.card.expanded .outreach-section h4 {
+  font-size: 1.1rem;
+}
+
+.card.expanded .outreach-list {
+  font-size: 0.95rem;
+}
+
 /* ===== Bullet List ===== */
 .bullet-list {
   list-style: disc;
