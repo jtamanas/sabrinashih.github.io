@@ -52,12 +52,14 @@
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <svg class="header-logo" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2L15 8H9L12 2Z" />
-        <path d="M6 10L10 16H2L6 10Z" />
-        <path d="M18 10L22 16H14L18 10Z" />
-      </svg>
-      <span class="header-title">Sabrina Shih, MS, LCSW</span>
+      <img class="header-logo" src="assets/Transparent.png" alt="Sabrina Shih headshot">
+      <div class="header-text">
+        <span class="header-title" id="header-name">Sabrina Shih, MS, LCSW</span>
+        <span class="header-subtitle">Clinical Leader. Healthcare Strategist. Equity Advocate.</span>
+      </div>
+    </div>
+    <div class="header-blurb" id="header-blurb">
+      <p>I bridge the gap between clinical excellence and organizational impact &mdash; building programs, shaping policy, and expanding access to care for the communities that need it most.</p>
     </div>
   </header>
 
@@ -65,10 +67,26 @@
 
   <main class="card-grid">
 
+    <div class="grid-header">
+      <div class="header-inner">
+        <img class="header-logo" src="assets/Transparent.png" alt="Sabrina Shih headshot">
+        <div class="header-text">
+          <span class="header-title" id="grid-header-name">Sabrina Shih, MS, LCSW</span>
+          <span class="header-subtitle">Clinical Leader. Healthcare Strategist. Equity Advocate.</span>
+        </div>
+      </div>
+      <div class="header-blurb" id="grid-header-blurb">
+        <p>I bridge the gap between clinical excellence and organizational impact &mdash; building programs, shaping policy, and expanding access to care for the communities that need it most.</p>
+      </div>
+    </div>
+
     <!-- Card 1: Bio -->
     <div class="card card--ice card--tall" id="card-bio">
       <div class="card-inner">
         <div class="card-face card-front">
+          <div class="card-headshot">
+            <img src="assets/Transparent.png" alt="Sabrina Shih headshot">
+          </div>
           <span class="card-plus">+</span>
           <svg class="card-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor"
@@ -99,12 +117,11 @@
           </button>
           <span class="card-back-watermark">Sabrina<br>Shih</span>
           <div class="card-content">
-            <h3>Hi, I'm Sabrina Shih, MS, LCSW.</h3>
-            <p>I am a Clinical Social Worker and the Director of the Adolescent Program at Mount Sinai Hospital's Eating
-              and Weight Disorders Program.</p>
-            <p>I specialize in delivering evidence-based psychotherapy, leading interdisciplinary clinical rounds, and
-              addressing social determinants of health. My passion lies in health equity, trauma support, and
-              innovative, culturally-competent mental healthcare.</p>
+            <h3>Hi, I'm Sabrina.</h3>
+            <p>I'm a Licensed Clinical Social Worker and currently the Director of Adolescent Services at Mount Sinai Hospital's Eating and Weight Disorders Program, one of the nation's leading specialized eating disorder centers.</p>
+            <p>My work merges clinical care and operational strategy. I lead interdisciplinary teams, design scalable programs, and develop evidence-based protocols that improve how healthcare systems deliver care &mdash; especially to underserved and culturally diverse populations. Using my foundation in direct clinical practice, I bridge the gap between high-level policy and frontline reality by integrating digital health and ensuring protocols work in practice.</p>
+            <p>My work is driven by a commitment to health equity and dismantling systemic barriers in healthcare. Beyond operations, I advocate for public health policy and provide clinical consultation and training for organizations across New York.</p>
+            <p>A few things I care about deeply: health equity, culturally competent care, finding better, more human ways to build healthcare systems that scale, and all things cheap eats + miniatures.</p>
             <div class="badge-row">
               <span class="badge">Bilingual: Mandarin</span>
               <span class="badge">LCSW No. 099980</span>
@@ -114,8 +131,8 @@
       </div>
     </div>
 
-    <!-- Card 2: Resume & Experience -->
-    <div class="card card--denim" id="card-resume">
+    <!-- Card 2: What I Do -->
+    <div class="card card--denim" id="card-whatido">
       <div class="card-inner">
         <div class="card-face card-front">
           <span class="card-plus">+</span>
@@ -124,7 +141,7 @@
               d="M66.4,-23.7C74.6,-1.4,61.7,27.9,41.5,45.3C21.3,62.7,-6.2,68.2,-28.9,56.8C-51.6,45.4,-69.5,17.2,-64.6,-6.6C-59.7,-30.4,-31.9,-49.8,-5,-48.2C22,-46.6,44,-24,66.4,-23.7Z"
               transform="translate(100 100) scale(1.3) rotate(45)" />
           </svg>
-          <h2 class="card-title">Resume<br>& Exp.</h2>
+          <h2 class="card-title">What<br>I Do</h2>
         </div>
         <div class="card-face card-back">
           <button class="card-btn-icon card-btn-close" aria-label="Close card">
@@ -146,35 +163,27 @@
               <path d="M2 14 L10 14 L10 22 Z" />
             </svg>
           </button>
-          <span class="card-back-watermark">Resume<br>& Exp.</span>
+          <span class="card-back-watermark">What<br>I Do</span>
           <div class="card-content">
-            <h3>Experience</h3>
-            <ul class="exp-list">
-              <li>
-                <strong>Mount Sinai Hospital</strong>
-                <span class="exp-role">Clinical Social Worker, Dir. Adolescent Program</span>
-              </li>
-              <li>
-                <strong>National Eating Disorders Assoc.</strong>
-                <span class="exp-role">Lead Legislative Advocate</span>
-              </li>
-              <li>
-                <strong>NYC Health+Hospitals</strong>
-                <span class="exp-role">Behavioral Health Intern</span>
-              </li>
-            </ul>
-            <a href="docs/Sabrina_Shih_CV.pdf" target="_blank" rel="noopener noreferrer" class="card-btn"
-              onclick="event.stopPropagation()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-                <polyline points="10 9 9 9 8 9" />
-              </svg>
-              View Full PDF
-            </a>
+            <h3>Areas of Expertise</h3>
+            <div class="expertise-list">
+              <div class="expertise-item">
+                <h4>Clinical Leadership & Program Development</h4>
+                <p>I direct interdisciplinary clinical teams and oversee the full lifecycle of program development. From delivering frontline therapeutic excellence to building operational infrastructure that keeps programs running at scale, I have helped engineered the growth of mental health programs to expand access to care.</p>
+              </div>
+              <div class="expertise-item">
+                <h4>Healthcare Operations & Quality Management</h4>
+                <p>I'm experienced in designing workflows, performance metrics, and clinical quality systems that improve both patient outcomes and team efficiency. I understand how to translate complex clinical insight into measurable operational strategy. This includes the development and troubleshooting of virtual care programs, where I ensure that digital delivery maintains clinical integrity while optimizing team effectiveness and stakeholder alignment.</p>
+              </div>
+              <div class="expertise-item">
+                <h4>Policy & Advocacy</h4>
+                <p>I leverage clinical data to influence systemic change at the federal level. By developing research-based policy analyses and presenting clinical evidence to legislative leaders, I work to shape public health outcomes. My contributions include federal advocacy efforts for significant mental health legislation, such as H.R. 2625, aimed at expanding access to specialized care.</p>
+              </div>
+              <div class="expertise-item">
+                <h4>Consulting & Training</h4>
+                <p>I consult with schools, healthcare organizations, and community groups on eating disorder prevention, mental health across the life-span, body image, and equitable care. Beyond individual consultation, I lead workforce development initiatives: training clinicians, medical residents, and educators to identify and address complex mental health challenges within their specific communities.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -68,12 +68,16 @@ document.querySelectorAll('.card').forEach(function (card) {
         transition.finished.finally(() => {
           card.style.viewTransitionName = '';
           document.documentElement.classList.remove('is-expanding', 'is-shrinking');
+          if (isExpanding) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         });
       } else {
         if (isExpanding) {
           document.querySelectorAll('.card.expanded').forEach(c => c.classList.remove('expanded'));
           card.classList.add('expanded');
           grid.classList.add('has-expanded-card');
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
           card.classList.remove('expanded');
           grid.classList.remove('has-expanded-card');
@@ -82,6 +86,32 @@ document.querySelectorAll('.card').forEach(function (card) {
     });
   }
 });
+
+// Toggle header blurb on name click (both sticky header and grid header)
+(function () {
+  var pairs = [
+    { name: document.getElementById('header-name'), blurb: document.getElementById('header-blurb'), container: '.site-header' },
+    { name: document.getElementById('grid-header-name'), blurb: document.getElementById('grid-header-blurb'), container: '.grid-header' }
+  ];
+
+  pairs.forEach(function (pair) {
+    if (!pair.name || !pair.blurb) return;
+
+    pair.name.addEventListener('click', function () {
+      pair.blurb.classList.toggle('open');
+    });
+  });
+
+  // Close blurbs when clicking outside their containers
+  document.addEventListener('click', function (e) {
+    pairs.forEach(function (pair) {
+      if (!pair.blurb) return;
+      if (!e.target.closest(pair.container)) {
+        pair.blurb.classList.remove('open');
+      }
+    });
+  });
+})();
 
 // Show hint pill after 5 seconds, dismiss with bubble-pop on click
 (function () {

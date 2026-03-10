@@ -37,6 +37,10 @@
   padding: 0;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: #faf9f6;
@@ -68,9 +72,17 @@ body {
 }
 
 .header-logo {
-  width: 2rem;
-  height: 2rem;
-  color: var(--denim);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  background-color: var(--denim);
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .header-title {
@@ -80,6 +92,60 @@ body {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-ice);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.header-title:hover {
+  opacity: 0.7;
+}
+
+.header-subtitle {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--slate);
+  letter-spacing: 0.02em;
+  margin-top: 0.1rem;
+}
+
+.header-blurb {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  padding: 0 0 0 2.75rem;
+}
+
+.header-blurb.open {
+  max-height: 6rem;
+  opacity: 1;
+  padding: 0.5rem 0 0.5rem 2.75rem;
+}
+
+.header-blurb p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-ice);
+  font-style: italic;
+  max-width: 700px;
+}
+
+/* ===== Grid Header (desktop only, replaces sticky header) ===== */
+.grid-header {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 1024px) {
+  .grid-header {
+    display: none;
+  }
+}
+
+@media (min-width: 1025px) {
+  .site-header {
+    display: none;
+  }
 }
 
 /* ===== Hint Pill ===== */
@@ -284,6 +350,25 @@ body {
   background: rgba(255, 255, 255, 0.25);
 }
 
+/* ===== Card Headshot (bio card image overlay) ===== */
+.card-headshot {
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: var(--card-radius);
+  z-index: 1;
+  overflow: hidden;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.card-headshot img {
+  height: 180px;
+  width: auto;
+  margin-right: -90px;
+  opacity: 0.85;
+}
+
 /* ===== Card SVG ===== */
 .card-svg {
   position: absolute;
@@ -432,6 +517,35 @@ body {
 .icon-list-svg {
   flex-shrink: 0;
   margin-top: 0.15rem;
+}
+
+/* ===== Expertise List (What I Do) ===== */
+.expertise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.expertise-item h4 {
+  font-family: 'Signika Negative', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.expertise-item p {
+  font-size: 0.8rem;
+  line-height: 1.55;
+  opacity: 0.9;
+  margin-bottom: 0;
+}
+
+.card.expanded .expertise-item h4 {
+  font-size: 1.1rem;
+}
+
+.card.expanded .expertise-item p {
+  font-size: 0.95rem;
 }
 
 /* ===== Bullet List ===== */
@@ -613,6 +727,7 @@ body {
   bottom: 0;
   height: auto;
   cursor: default;
+  scroll-margin-top: 4rem;
 }
 
 .card.expanded .card-content {
@@ -625,6 +740,10 @@ body {
 
 /* ===== Responsive — Tablet ===== */
 @media (max-width: 1024px) {
+  .card-headshot {
+    display: flex;
+  }
+
   .card-grid {
     grid-template-columns: repeat(2, 1fr);
     padding: 0 1.5rem 1rem;
@@ -669,6 +788,23 @@ body {
   .header-title {
     font-size: 1rem;
     letter-spacing: 0.1em;
+  }
+
+  .header-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .header-blurb {
+    padding-left: 0;
+  }
+
+  .header-blurb.open {
+    padding: 0.4rem 0 0.4rem 0;
+    max-height: 8rem;
+  }
+
+  .header-blurb p {
+    font-size: 0.78rem;
   }
 
   .card {
