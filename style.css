@@ -362,6 +362,11 @@ body {
   justify-content: flex-end;
 }
 
+.card-headshot picture {
+  display: flex;
+  align-items: flex-end;
+}
+
 .card-headshot img {
   height: 180px;
   width: auto;
