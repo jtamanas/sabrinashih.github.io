@@ -71,6 +71,10 @@ body {
   gap: 0.75rem;
 }
 
+.header-inner picture {
+  flex-shrink: 0;
+}
+
 .header-logo {
   width: 2.5rem;
   height: 2.5rem;
