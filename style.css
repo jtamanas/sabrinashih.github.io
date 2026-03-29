@@ -1041,6 +1041,11 @@ body {
 
 /* ===== Responsive — Mobile ===== */
 @media (max-width: 600px) {
+  .card-headshot img {
+    height: 110px;
+    margin-right: -50px;
+  }
+
   .card-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
