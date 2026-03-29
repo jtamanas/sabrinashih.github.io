@@ -87,6 +87,34 @@ document.querySelectorAll('.card').forEach(function (card) {
   }
 });
 
+// Close expanded card when clicking the background (outside any card)
+(function () {
+  document.addEventListener('click', function (e) {
+    var expandedCard = document.querySelector('.card.expanded');
+    if (!expandedCard) return;
+    if (e.target.closest('.card')) return;
+
+    if (document.startViewTransition) {
+      expandedCard.style.viewTransitionName = 'active-card';
+      document.documentElement.classList.add('is-shrinking');
+      document.documentElement.classList.remove('is-expanding');
+      var transition = document.startViewTransition(function () {
+        expandedCard.classList.remove('expanded');
+        document.querySelector('.card-grid').classList.remove('has-expanded-card');
+      });
+      transition.finished.then(function () {
+        document.documentElement.classList.remove('is-shrinking');
+        expandedCard.style.viewTransitionName = '';
+        expandedCard.classList.remove('flipped');
+      });
+    } else {
+      expandedCard.classList.remove('expanded');
+      expandedCard.classList.remove('flipped');
+      document.querySelector('.card-grid').classList.remove('has-expanded-card');
+    }
+  });
+})();
+
 // Toggle header blurb on name click (both sticky header and grid header)
 (function () {
   var pairs = [
