@@ -1087,6 +1087,12 @@ body {
     height: 216px;
   }
 
+  .card-grid .card:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 0.5rem);
+  }
+
   .card-title {
     font-size: 1.35rem;
   }
