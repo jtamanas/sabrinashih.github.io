@@ -239,7 +239,7 @@
             <h3>Speaking &amp; Workshops</h3>
             <p>I&#8217;m a frequent speaker, educator, and workshop facilitator on eating disorders, adolescent mental health, body image, and clinical care &mdash; across schools, hospitals, and professional organizations.</p>
             <p class="outreach-cta">Available for speaking engagements, staff training, workshop facilitation, and program development. <a href="mailto:sabrinachshih@gmail.com" class="outreach-link" onclick="event.stopPropagation()">Get in touch</a> to discuss.</p>
-            <img src="assets/outreach-impact-graphic.jpg" alt="Outreach Impact Graphic — Expert voice. Real World Impact." class="outreach-graphic" />
+            <img src="assets/outreach-impact-graphic.svg" alt="Outreach Impact Graphic — Expert voice. Real World Impact." class="outreach-graphic" />
             <div class="outreach-sections">
               <div class="outreach-section">
                 <h4><svg class="outreach-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.34l-.77-.76a5.4 5.4 0 00-7.65 0 5.4 5.4 0 000 7.65L12 20.66l8.42-8.42a5.4 5.4 0 000-7.66z"/><polyline points="3 12 7 12 9 9 11 15 13 9 15 12 21 12"/></svg> Hospitals &amp; Clinical Settings</h4>
@@ -340,26 +340,131 @@
           </button>
           <span class="card-back-watermark">Expertise</span>
           <div class="card-content">
-            <h3>Speaking Engagements</h3>
-            <p>Highlighting systemic issues, eating disorder prevention in schools, and clinical care coordination
-              strategies.</p>
-            <div class="talk-links">
-              <a href="#" class="talk-link" onclick="event.stopPropagation()">
-                <span>Mount Sinai Grand Rounds</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
-              </a>
-              <a href="#" class="talk-link" onclick="event.stopPropagation()">
-                <span>View All Talks</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
-              </a>
+            <p class="btn-section-tag">By the numbers</p>
+            <h3 class="btn-section-title">A snapshot of impact.</h3>
+
+            <div class="btn-filter-row">
+              <button class="btn-filter active" onclick="filterMetrics('all', this); event.stopPropagation();">All</button>
+              <button class="btn-filter" onclick="filterMetrics('clinical', this); event.stopPropagation();">Clinical excellence</button>
+              <button class="btn-filter" onclick="filterMetrics('strategy', this); event.stopPropagation();">Strategy &amp; operations</button>
+              <button class="btn-filter" onclick="filterMetrics('growth', this); event.stopPropagation();">Growth &amp; talent</button>
+              <button class="btn-filter" onclick="filterMetrics('impact', this); event.stopPropagation();">Impact &amp; outcomes</button>
+            </div>
+
+            <div class="btn-metrics-grid">
+
+              <div class="btn-metric-card btn-cat-clinical" data-cat="clinical">
+                <p class="btn-card-cat">Clinical excellence</p>
+                <p class="btn-card-figure">470+</p>
+                <p class="btn-card-label">Patient caseload managed across outpatient, intensive programming, and virtual modalities as SME</p>
+                <p class="btn-card-detail">Axis I + II (esp. eating disorders, anxiety, mood disorders, and personality disorders)</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-clinical" data-cat="clinical">
+                <p class="btn-card-cat">Clinical excellence</p>
+                <p class="btn-card-figure">13+</p>
+                <p class="btn-card-label">Evidence-based modalities delivered and supervised</p>
+                <p class="btn-card-detail">CBT, CBT-E, DBT, ACT, FBT, IE, AFT, CBT-AR, Motivational Interviewing, Exposure Therapy (incl. ERP), IPT, Schema Therapy, Behavioural Activation</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-clinical" data-cat="clinical">
+                <p class="btn-card-cat">Clinical excellence</p>
+                <p class="btn-card-figure">5</p>
+                <p class="btn-card-label">Escalation-of-care protocols designed and implemented</p>
+                <p class="btn-card-detail">Tiered risk pathways from outpatient to inpatient, eating disorder standardized protocol, effective step-level care escalation</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-clinical" data-cat="clinical">
+                <p class="btn-card-cat">Clinical excellence</p>
+                <p class="btn-card-figure">100%</p>
+                <p class="btn-card-label">Compliance rate across quality audits and accreditation reviews</p>
+                <p class="btn-card-detail">Joint Commission, state regulatory, and internal clinical standards; data integrity &amp; governance refined</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-strategy" data-cat="strategy">
+                <p class="btn-card-cat">Strategy &amp; operations</p>
+                <p class="btn-card-figure">3</p>
+                <p class="btn-card-label">Clinical programs built from zero to fully operational</p>
+                <p class="btn-card-detail">Various successful transitioning from pilot to full-scale integration across a network serving 5 NYC boroughs: incl. virtual care expansion, intensive program for high-risk patients</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-strategy" data-cat="strategy">
+                <p class="btn-card-cat">Strategy &amp; operations</p>
+                <p class="btn-card-figure">60%</p>
+                <p class="btn-card-label">Reduction in intake-to-treatment wait time through workflow redesign</p>
+                <p class="btn-card-detail">Mapped end-to-end patient journey, design + embed behavioral health protocols into existing EHR workflows</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-strategy" data-cat="strategy">
+                <p class="btn-card-cat">Strategy &amp; operations</p>
+                <p class="btn-card-figure">9+</p>
+                <p class="btn-card-label">Skills used for lean process improvement, operational efficiency, performance metrics + KPI defined and monitored</p>
+                <p class="btn-card-detail">Creation and implementation of SOPs, validation protocols for data integrity, capacity management</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-strategy" data-cat="strategy">
+                <p class="btn-card-cat">Strategy &amp; operations</p>
+                <p class="btn-card-figure">93%</p>
+                <p class="btn-card-label">Conversion Rate Optimization leading to revenue-generating program capacity growth</p>
+                <p class="btn-card-detail">Consistent high utilization, top patient retention, improved clinical yield enhancement</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-growth" data-cat="growth">
+                <p class="btn-card-cat">Growth &amp; talent development</p>
+                <p class="btn-card-figure">55+</p>
+                <p class="btn-card-label">Clinicians, students, and staff trained or supervised</p>
+                <p class="btn-card-detail">MSW students, medical residents, early-career therapists, interdisciplinary staff, mentorship</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-growth" data-cat="growth">
+                <p class="btn-card-cat">Growth &amp; talent development</p>
+                <p class="btn-card-figure">38</p>
+                <p class="btn-card-label">Workshops and training programs designed and delivered</p>
+                <p class="btn-card-detail">ED prevention, cultural competency, clinical risk, trauma-informed care, minority mental health</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-growth" data-cat="growth">
+                <p class="btn-card-cat">Growth &amp; talent development</p>
+                <p class="btn-card-figure">15+</p>
+                <p class="btn-card-label">Curriculum modules built for ongoing development</p>
+                <p class="btn-card-detail">Onboarding tracks, continuing education, and competency assessments; academic and training curriculums</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-growth" data-cat="growth">
+                <p class="btn-card-cat">Growth &amp; talent development</p>
+                <p class="btn-card-figure">3</p>
+                <p class="btn-card-label">Federal legislative advocacy campaign co-led</p>
+                <p class="btn-card-detail">H.R. 2625 — expanding access to specialized eating disorder care, H.R.2495 — increased coverage for nutrition services, NYSB S.3101 — mental health parity</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-impact" data-cat="impact">
+                <p class="btn-card-cat">Impact &amp; outcomes</p>
+                <p class="btn-card-figure">97%</p>
+                <p class="btn-card-label">Improvement in patient-reported outcome measures</p>
+                <p class="btn-card-detail">Pre/post treatment scores across standardized clinical assessments</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-impact" data-cat="impact">
+                <p class="btn-card-cat">Impact &amp; outcomes</p>
+                <p class="btn-card-figure">88%</p>
+                <p class="btn-card-label">Increase in program utilization after operational redesign</p>
+                <p class="btn-card-detail">Referral conversion, reduced treatment access disparities within underserved populations, decreased median wait time from initial referral to diagnostic assessment</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-impact" data-cat="impact">
+                <p class="btn-card-cat">Impact &amp; outcomes</p>
+                <p class="btn-card-figure">5+</p>
+                <p class="btn-card-label">Data platforms and tech fluency used for clinical and operational decisions</p>
+                <p class="btn-card-detail">EHR (Epic), CRM (i.e: Salesforce), Tableau, PeerPlace, Excel (advanced), Google Suite, CRM, Redcap, MS Project</p>
+              </div>
+
+              <div class="btn-metric-card btn-cat-impact" data-cat="impact">
+                <p class="btn-card-cat">Impact &amp; outcomes</p>
+                <p class="btn-card-figure">32</p>
+                <p class="btn-card-label">Stakeholder presentations delivered to leadership and partners</p>
+                <p class="btn-card-detail">Cross-functional planning sessions, incl. initiatives to increase value-based care success</p>
+              </div>
+
             </div>
           </div>
         </div>

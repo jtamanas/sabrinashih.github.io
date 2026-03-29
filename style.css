@@ -571,6 +571,13 @@ body {
   display: block;
   margin: 1rem auto 1.5rem;
   border-radius: 8px;
+  object-fit: contain;
+}
+
+@media (max-width: 1024px) {
+  .outreach-graphic {
+    max-width: 90%;
+  }
 }
 
 @media (max-width: 600px) {
@@ -687,6 +694,168 @@ body {
 
 .talk-link:hover svg {
   opacity: 1;
+}
+
+/* ===== By The Numbers (Expertise Card) ===== */
+.btn-section-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.6;
+  margin-bottom: 0.25rem;
+}
+
+.btn-section-title {
+  font-family: 'Signika Negative', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.btn-filter-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-filter {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+}
+
+.btn-filter:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+.btn-filter.active {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-weight: 500;
+}
+
+.btn-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.btn-metric-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 8px;
+  padding: 14px 12px;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  border-left: 3px solid #888;
+  color: #1a1a1a;
+}
+
+.btn-metric-card.dimmed {
+  opacity: 0.12;
+  transform: scale(0.97);
+}
+
+.btn-card-cat {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.btn-card-figure {
+  font-family: 'Signika Negative', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+  line-height: 1.1;
+}
+
+.btn-card-label {
+  font-size: 0.7rem;
+  color: #2a2a2a;
+  margin-bottom: 6px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.btn-card-detail {
+  font-size: 0.6rem;
+  color: rgba(0, 0, 0, 0.4);
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* Category colors */
+.btn-cat-clinical { border-left-color: #1b6b5a; }
+.btn-cat-strategy { border-left-color: #b5785a; }
+.btn-cat-growth   { border-left-color: #3d5a80; }
+.btn-cat-impact   { border-left-color: #7a4068; }
+
+.btn-cat-clinical .btn-card-cat { color: #1b6b5a; }
+.btn-cat-strategy .btn-card-cat { color: #b5785a; }
+.btn-cat-growth .btn-card-cat   { color: #3d5a80; }
+.btn-cat-impact .btn-card-cat   { color: #7a4068; }
+
+/* Expanded card sizes */
+.card.expanded .btn-section-title {
+  font-size: 1.75rem;
+}
+
+.card.expanded .btn-filter {
+  font-size: 0.75rem;
+  padding: 6px 14px;
+}
+
+.card.expanded .btn-metrics-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.card.expanded .btn-metric-card {
+  padding: 18px 16px;
+}
+
+.card.expanded .btn-card-cat {
+  font-size: 0.65rem;
+}
+
+.card.expanded .btn-card-figure {
+  font-size: 2.25rem;
+}
+
+.card.expanded .btn-card-label {
+  font-size: 0.8rem;
+}
+
+.card.expanded .btn-card-detail {
+  font-size: 0.7rem;
+}
+
+@media (max-width: 600px) {
+  .btn-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-filter-row {
+    gap: 4px;
+  }
+
+  .btn-filter {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+  }
 }
 
 /* ===== Contact Rows ===== */

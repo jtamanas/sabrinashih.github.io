@@ -195,6 +195,21 @@ document.querySelectorAll('.card').forEach(function (card) {
   }, 2000);
 })();
 
+// Filter metrics cards in the Expertise "By the Numbers" section
+function filterMetrics(cat, btn) {
+  document.querySelectorAll('.btn-filter').forEach(function (b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  document.querySelectorAll('.btn-metric-card').forEach(function (card) {
+    if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+      card.classList.remove('dimmed');
+    } else {
+      card.classList.add('dimmed');
+    }
+  });
+}
+
 // Show hint pill after 5 seconds, dismiss with bubble-pop on click
 (function () {
   var hint = document.getElementById('hint');
