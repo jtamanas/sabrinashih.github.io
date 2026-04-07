@@ -209,10 +209,12 @@ function filterMetrics(cat, btn) {
     }
   });
 
-  // Scroll the metrics grid to the top of the viewport
+  // Scroll the card's content area so the metrics grid is at the top
+  var container = document.querySelector('#card-talks .card-content');
   var grid = document.querySelector('.btn-metrics-grid');
-  if (grid) {
-    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (container && grid) {
+    var gridTop = grid.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+    container.scrollTo({ top: gridTop, behavior: 'smooth' });
   }
 }
 
