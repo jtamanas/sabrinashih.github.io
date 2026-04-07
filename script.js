@@ -208,6 +208,12 @@ function filterMetrics(cat, btn) {
       card.classList.add('dimmed');
     }
   });
+
+  // Scroll the metrics grid to the top of the viewport
+  var grid = document.querySelector('.btn-metrics-grid');
+  if (grid) {
+    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 // Show hint pill after 5 seconds, dismiss with bubble-pop on click
