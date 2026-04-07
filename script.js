@@ -201,17 +201,29 @@ function filterMetrics(cat, btn) {
     b.classList.remove('active');
   });
   btn.classList.add('active');
-  document.querySelectorAll('.btn-metric-card').forEach(function (card) {
+
+  var grid = document.querySelector('.btn-metrics-grid');
+  var cards = Array.from(document.querySelectorAll('.btn-metric-card'));
+  var matched = [];
+  var unmatched = [];
+
+  cards.forEach(function (card) {
     if (cat === 'all' || card.getAttribute('data-cat') === cat) {
       card.classList.remove('dimmed');
+      matched.push(card);
     } else {
       card.classList.add('dimmed');
+      unmatched.push(card);
     }
+  });
+
+  // Move matched cards to top, unmatched to bottom
+  matched.concat(unmatched).forEach(function (card) {
+    grid.appendChild(card);
   });
 
   // Scroll the card's content area so the metrics grid is at the top
   var container = document.querySelector('#card-talks .card-content');
-  var grid = document.querySelector('.btn-metrics-grid');
   if (container && grid) {
     var gridTop = grid.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
     container.scrollTo({ top: gridTop, behavior: 'smooth' });
