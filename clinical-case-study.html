@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinical Case Study — Eating Disorder Treatment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #faf8f5; --fg: #7a746f; --card: #ffffff; --primary: #4a7c6f;
+      --primary-fg: #ffffff; --secondary: #677ca9; --secondary-fg: #ffffff;
+      --muted: #e0dbd4; --muted-fg: #7a746f; --accent: #e8f2ef;
+      --accent-fg: #4a7c6f; --destructive: #b5785a; --ring: #70a798;
+      --chart-1: #4a7c6f; --chart-2: #70a798; --chart-3: #677ca9;
+      --chart-4: #97aeaa; --chart-5: #7c9a95; --radius: 0.75rem;
+      --light-blue: #cddce8; --green-light: #c5d7cb; --border: rgba(122,116,111,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .max-w { max-width: 72rem; margin: 0 auto; }
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    .sec { padding: 3rem 1.5rem; }
+    @media(min-width:768px){ .sec { padding: 4rem 3rem; } }
+    @media(min-width:1024px){ .sec { padding: 5rem 6rem; } }
+    .sec-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .sec h2 { font-size: 1.5rem; font-weight: 700; }
+    .sec .sec-desc { color: var(--fg); margin-bottom: 2rem; max-width: 48rem; }
+
+    /* Hero */
+    .hero { background: var(--secondary); color: #fff; }
+    .hero-badge { display: inline-block; padding: 0.375rem 1rem; background: rgba(255,255,255,0.15); border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; backdrop-filter: blur(4px); }
+    .hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.375rem; }
+    @media(min-width:768px){ .hero h1 { font-size: 2.5rem; } }
+    .hero .subtitle { font-size: 1.125rem; opacity: 0.9; margin-bottom: 0.75rem; }
+    .hero .overview { opacity: 0.85; max-width: 48rem; line-height: 1.7; margin-bottom: 2rem; }
+    .hero-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-top: 1.5rem; }
+    @media(min-width:768px){ .hero-grid { grid-template-columns: repeat(4,1fr); } }
+    .hero-grid .label { font-size: 0.875rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .hero-grid .value { font-size: 1rem; font-weight: 500; }
+
+    /* TOC */
+    .toc { background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); }
+    .toc h2 { color: var(--secondary); font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; }
+    .toc-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+    @media(min-width:600px){ .toc-grid { grid-template-columns: 1fr 1fr; } }
+    @media(min-width:900px){ .toc-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .toc-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; background: var(--bg); text-decoration: none; color: var(--fg); font-size: 0.875rem; font-weight: 500; transition: all 0.2s; border: 1px solid transparent; }
+    .toc-link:hover { border-color: var(--primary); background: var(--accent); color: var(--primary); transform: translateX(4px); }
+    .toc-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+
+    /* Stat Cards */
+    .stat-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+    @media(min-width:768px){ .stat-grid { grid-template-columns: repeat(4,1fr); } }
+    .stat-card { background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: transform 0.2s, box-shadow 0.2s; cursor: default; position: relative; overflow: hidden; }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .stat-card .stat-accent { position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+    .stat-card .stat-value { font-size: 2rem; font-weight: 800; margin: 0.75rem 0 0.25rem; }
+    .stat-card .stat-label { font-size: 0.8125rem; color: var(--muted-fg); line-height: 1.4; }
+    .stat-card .stat-sub { font-size: 0.6875rem; color: var(--muted-fg); margin-top: 0.5rem; opacity: 0.7; }
+
+    /* Challenge */
+    .challenge { background: var(--light-blue); }
+    .challenge h2 { color: var(--secondary); }
+    .challenge-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+    @media(min-width:768px){ .challenge-grid { grid-template-columns: 1fr 1fr; } }
+    .clist { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .clist li { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .clist li svg { flex-shrink: 0; margin-top: 2px; color: var(--destructive); }
+    .clist li span { font-size: 0.875rem; }
+    .col-title { font-weight: 600; color: var(--secondary); margin-bottom: 0.75rem; }
+
+    /* Severity */
+    .severity-wrap { margin-top: 2rem; background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.25rem; }
+    .severity-wrap h4 { font-size: 0.875rem; font-weight: 700; color: var(--secondary); margin-bottom: 1rem; }
+    .severity-bar { position: relative; height: 28px; border-radius: 999px; overflow: hidden; display: flex; }
+    .sev-seg { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0.6875rem; font-weight: 600; color: #fff; }
+    .severity-marker { position: absolute; top: -6px; width: 3px; height: 40px; background: #333; border-radius: 2px; }
+    .severity-marker::after { content: attr(data-label); position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.625rem; font-weight: 700; color: #333; white-space: nowrap; }
+    .severity-legend { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.6875rem; color: var(--muted-fg); }
+
+    /* Timeline */
+    .timeline-section { background: var(--bg); }
+    .timeline-section h2 { color: var(--secondary); }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--secondary), var(--primary), var(--ring)); border-radius: 2px; }
+    .tl-item { position: relative; margin-bottom: 2rem; }
+    .tl-dot { position: absolute; left: -2rem; top: 4px; width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--card); }
+    .tl-item .tl-phase { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem; }
+    .tl-item h4 { font-size: 1rem; font-weight: 600; color: var(--fg); margin-bottom: 0.25rem; }
+    .tl-item p { font-size: 0.8125rem; color: var(--muted-fg); line-height: 1.5; }
+    .tl-tag { display: inline-block; font-size: 0.6875rem; padding: 0.2rem 0.5rem; border-radius: 999px; font-weight: 500; margin-top: 0.375rem; }
+
+    /* Tabs */
+    .tab-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+    .tab-btn { padding: 0.625rem 1.25rem; border-radius: var(--radius); border: none; background: transparent; font-size: 0.875rem; font-family: inherit; font-weight: 500; color: var(--fg); cursor: pointer; transition: all 0.25s; }
+    .tab-btn:hover { background: var(--accent); }
+    .tab-btn.active { background: var(--primary); color: #fff; }
+    .tab-panel { display: none; background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.5rem 2rem; animation: fadeSlide 0.4s ease; max-height: 420px; overflow-y: auto; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeSlide { from { opacity:0; transform:translateX(-20px); } to { opacity:1; transform:translateX(0); } }
+    .tab-panel h3 { color: var(--primary); font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .tab-panel p { color: var(--fg); line-height: 1.7; }
+
+    /* Measured Outcomes */
+    .measured { background: var(--primary); color: #fff; }
+    .measured h2 { color: #fff; }
+    .measured .sec-desc { color: rgba(255,255,255,0.85); }
+    .chart-row { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2.5rem; }
+    @media(min-width:768px){ .chart-row { grid-template-columns: 1fr 1fr; } }
+    .chart-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius); padding: 1.5rem; }
+    .chart-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .chart-card .chart-sub { font-size: 0.8125rem; opacity: 0.7; margin-bottom: 1rem; }
+    .chart-canvas-wrap { position: relative; width: 100%; }
+
+    .behav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .behav-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius); padding: 1rem; text-align: center; transition: transform 0.2s; }
+    .behav-card:hover { transform: scale(1.03); }
+    .behav-card .behav-icon { margin-bottom: 0.5rem; }
+    .behav-card .behav-before { font-size: 0.75rem; opacity: 0.6; text-decoration: line-through; margin-bottom: 0.125rem; }
+    .behav-card .behav-after { font-size: 1.25rem; font-weight: 800; color: var(--accent); }
+    .behav-card .behav-name { font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem; }
+    .behav-card .arrow-down { font-size: 0.875rem; opacity: 0.5; }
+
+    .ck-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+    .ck-list li { display: flex; gap: 0.75rem; }
+    .ck-list li svg { flex-shrink: 0; margin-top: 2px; color: var(--ring); }
+    .ck-title { font-weight: 500; }
+    .ck-desc { font-size: 0.8125rem; opacity: 0.8; }
+
+    .radial-wrap { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 2rem; }
+    .radial-legend { display: flex; flex-direction: column; gap: 0.75rem; }
+    .radial-legend-item { display: flex; align-items: center; gap: 0.625rem; }
+    .radial-legend-dot { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+    .radial-legend-text { font-size: 0.8125rem; }
+    .radial-legend-value { font-weight: 700; font-size: 0.9375rem; }
+
+    .toggle-wrap { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .toggle-label { font-size: 0.8125rem; font-weight: 500; opacity: 0.8; }
+    .toggle-switch { position: relative; width: 48px; height: 26px; background: rgba(255,255,255,0.2); border-radius: 999px; cursor: pointer; transition: background 0.3s; border: none; padding: 0; }
+    .toggle-switch.on { background: var(--ring); }
+    .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: transform 0.3s; }
+    .toggle-switch.on::after { transform: translateX(22px); }
+
+    /* Insights */
+    .insights { background: var(--accent); }
+    .insights h2 { color: var(--primary); }
+    .info-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid var(--muted); padding-bottom: 0.75rem; }
+    .info-tab { padding: 0.5rem 1rem; border: none; background: transparent; font-family: inherit; font-size: 0.8125rem; font-weight: 600; color: var(--muted-fg); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.825rem; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.04em; }
+    .info-tab:hover { color: var(--primary); }
+    .info-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .info-panel { display: none; animation: fadeSlide 0.4s ease; }
+    .info-panel.active { display: block; }
+
+    .proto-flow { display: flex; flex-direction: column; gap: 1rem; }
+    @media(min-width:768px){ .proto-flow { flex-direction: row; align-items: flex-start; } }
+    .proto-step { flex: 1; background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.25rem; }
+    .proto-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .proto-step h4 { color: var(--primary); font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.375rem; }
+    .proto-step ul { list-style: none; margin-top: 0.5rem; }
+    .proto-step ul li { font-size: 0.8125rem; padding: 0.2rem 0 0.2rem 1rem; position: relative; }
+    .proto-step ul li::before { content:''; position: absolute; left: 0; top: 0.55rem; width: 6px; height: 6px; border-radius: 50%; background: var(--ring); }
+    .proto-arrow { display: none; align-self: center; color: var(--primary); flex-shrink: 0; }
+    @media(min-width:768px){ .proto-arrow { display: block; } }
+
+    .readiness-card { background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.5rem; margin-top: 1.5rem; }
+    .readiness-card h4 { color: var(--secondary); font-weight: 600; margin-bottom: 1rem; font-size: 0.9375rem; }
+    .r-items { display: flex; flex-direction: column; gap: 0.75rem; }
+    .r-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; background: var(--bg); cursor: pointer; transition: all 0.2s; border: 1px solid transparent; user-select: none; }
+    .r-item:hover { border-color: var(--primary); }
+    .r-item.met { background: rgba(74,124,111,0.08); border-color: var(--primary); }
+    .r-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+    .r-item.met .r-check { background: var(--primary); border-color: var(--primary); }
+    .r-item.met .r-check svg { opacity: 1; }
+    .r-check svg { opacity: 0; transition: opacity 0.2s; }
+    .r-type { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.125rem; }
+    .r-desc { font-size: 0.8125rem; color: var(--fg); }
+    .r-bar-wrap { margin-top: 1rem; }
+    .r-bar-label { display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 500; margin-bottom: 0.375rem; }
+    .r-bar-track { width: 100%; height: 10px; background: var(--muted); border-radius: 999px; overflow: hidden; }
+    .r-bar-fill { height: 100%; border-radius: 999px; background: var(--primary); transition: width 0.8s; }
+
+    .pipeline { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.5rem; }
+    @media(min-width:768px){ .pipeline { grid-template-columns: repeat(5,1fr); } }
+    .pipe-step { background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.25rem; text-align: center; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
+    .pipe-step:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+    .pipe-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--accent); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; }
+    .pipe-step h4 { font-size: 0.8125rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.25rem; }
+    .pipe-step .pipe-sub { font-size: 0.6875rem; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem; }
+    .pipe-step ul { list-style: none; text-align: left; }
+    .pipe-step ul li { font-size: 0.8125rem; padding: 0.15rem 0 0.15rem 0.875rem; position: relative; }
+    .pipe-step ul li::before { content:''; position: absolute; left: 0; top: 0.5rem; width: 5px; height: 5px; border-radius: 50%; background: var(--ring); }
+    .pipe-arrow { display: none; position: absolute; right: -0.625rem; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1; }
+    @media(min-width:768px){ .pipe-arrow { display: block; } }
+
+    .build-layout { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    @media(min-width:1024px){ .build-layout { grid-template-columns: 1fr 280px 1fr; } }
+    .build-col { display: flex; flex-direction: column; gap: 0.75rem; }
+    .b-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.875rem 1rem; background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); transition: transform 0.2s, box-shadow 0.2s; }
+    .b-item:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .b-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .b-item h5 { font-size: 0.8125rem; font-weight: 600; color: var(--fg); margin-bottom: 0.125rem; }
+    .b-item p { font-size: 0.75rem; color: var(--muted-fg); line-height: 1.4; }
+    .center-hub { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 280px; }
+    .hub-ring { width: 200px; height: 200px; border-radius: 50%; border: 3px solid var(--primary); display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); }
+    .hub-center { text-align: center; padding: 1.5rem; }
+    .hub-label { font-size: 0.9375rem; font-weight: 700; color: var(--primary); }
+    .hub-sub { font-size: 0.6875rem; color: var(--muted-fg); line-height: 1.4; margin-top: 0.25rem; }
+    .spokes { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.375rem; margin-top: 1rem; }
+    .spoke { font-size: 0.6875rem; font-weight: 500; padding: 0.25rem 0.625rem; border-radius: 999px; background: rgba(74,124,111,0.1); color: var(--primary); white-space: nowrap; }
+    .impact-bar { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.75rem; margin-top: 2rem; }
+    @media(min-width:768px){ .impact-bar { grid-template-columns: repeat(4,1fr); } }
+    .impact-item { display: flex; align-items: center; gap: 0.625rem; padding: 0.75rem 1rem; background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); }
+    .impact-item h5 { font-size: 0.75rem; font-weight: 600; color: var(--primary); }
+    .impact-item p { font-size: 0.6875rem; color: var(--muted-fg); }
+
+    .mock-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media(min-width:768px){ .mock-grid { grid-template-columns: 280px 1fr; } }
+    .app-mock { background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.25rem; }
+    .app-mock h5 { font-size: 0.75rem; font-weight: 600; color: var(--secondary); margin-bottom: 0.75rem; }
+    .log-item { display: flex; justify-content: space-between; align-items: center; padding: 0.375rem 0; border-bottom: 1px solid var(--border); font-size: 0.8125rem; }
+    .log-item:last-child { border: none; }
+    .log-toggle { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+    .log-toggle.checked { background: var(--primary); border-color: var(--primary); }
+    .log-toggle.checked svg { opacity: 1; }
+    .log-toggle svg { opacity: 0; transition: opacity 0.2s; }
+    .dash-mock { background: var(--card); border: 1px solid var(--muted); border-radius: var(--radius); padding: 1.25rem; }
+    .dash-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .dash-widget { flex: 1; min-width: 130px; background: var(--bg); border-radius: 0.5rem; padding: 0.875rem; }
+    .dash-widget h5 { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 0.5rem; }
+    .mini-chart { display: flex; align-items: flex-end; gap: 3px; height: 40px; }
+    .mini-bar { width: 8px; border-radius: 2px 2px 0 0; background: var(--chart-2); transition: height 0.6s; }
+
+    footer { background: var(--secondary); color: #fff; padding: 2rem 1.5rem; text-align: center; }
+    @media(min-width:768px){ footer { padding: 3rem; } }
+    footer p { opacity: 0.8; margin-bottom: 0.5rem; }
+    footer .disclaimer { font-size: 0.875rem; opacity: 0.6; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero sec">
+  <div class="max-w fade-up">
+    <div class="hero-badge">Clinical Case Study</div>
+    <h1>Eating Disorder Treatment</h1>
+    <p class="subtitle">Evidence-Based Integrated Approach &mdash; CBT-E + Mirror Exposure Therapy</p>
+    <p class="overview"><em>This case demonstrates sustained recovery in a complex clinical presentation through an integrated CBT-E and Mirror Exposure Therapy approach, achieving full behavioral remission and significant functional restoration in a high-acuity adolescent patient.</em></p>
+    <div class="hero-grid">
+      <div><div class="label">Patient</div><div class="value">18 y/o biracial cisgender female</div></div>
+      <div><div class="label">Diagnosis</div><div class="value">Bulimia Nervosa, Extreme Severity (F50.24)</div></div>
+      <div><div class="label">Duration</div><div class="value">13 months outpatient</div></div>
+      <div><div class="label">Setting</div><div class="value">Specialized Outpatient</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<section class="sec" style="padding-top:2.5rem;padding-bottom:2.5rem;">
+  <div class="max-w">
+    <div class="toc fade-up" style="padding:1.5rem 2rem;">
+      <h2>Table of Contents</h2>
+      <div class="toc-grid">
+        <a href="#outcomes" class="toc-link"><span class="toc-num" style="background:var(--primary);">1</span>Treatment Outcomes at a Glance</a>
+        <a href="#challenge" class="toc-link"><span class="toc-num" style="background:var(--secondary);">2</span>The Clinical Challenge</a>
+        <a href="#timeline" class="toc-link"><span class="toc-num" style="background:var(--ring);">3</span>Treatment Journey</a>
+        <a href="#reasoning" class="toc-link"><span class="toc-num" style="background:var(--chart-3);">4</span>Clinical Reasoning &amp; Approach</a>
+        <a href="#measured" class="toc-link"><span class="toc-num" style="background:var(--primary);">5</span>Measured Outcomes &amp; Impact</a>
+        <a href="#insights" class="toc-link"><span class="toc-num" style="background:var(--destructive);">6</span>Scalable Insights for Digital Health</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY STATISTICS -->
+<section class="sec" id="outcomes">
+  <div class="max-w">
+    <div class="sec-header fade-up">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <h2 style="color:var(--secondary);">Treatment Outcomes at a Glance</h2>
+    </div>
+    <p class="sec-desc fade-up">Key metrics demonstrating the impact of integrated CBT-E and Mirror Exposure Therapy across 13 months of treatment.</p>
+    <div class="stat-grid fade-up">
+      <div class="stat-card"><div class="stat-accent" style="background:var(--primary);"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div class="stat-value" style="color:var(--primary);">100%</div><div class="stat-label">Reduction in All Compensatory Behaviours</div><div class="stat-sub">Self-induced purging, binge eating, laxative use, compulsive exercise</div></div>
+      <div class="stat-card"><div class="stat-accent" style="background:var(--chart-3);"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--chart-3)" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg><div class="stat-value" style="color:var(--chart-3);">85%</div><div class="stat-label">Reduction in ED Cognitions</div><div class="stat-sub">Eating disorder thoughts reported</div></div>
+      <div class="stat-card"><div class="stat-accent" style="background:var(--ring);"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--ring)" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg><div class="stat-value" style="color:var(--ring);">42%</div><div class="stat-label">Improvement in EAT-40</div><div class="stat-sub">Global score: 65 &rarr; 38</div></div>
+      <div class="stat-card"><div class="stat-accent" style="background:var(--primary);"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div class="stat-value" style="color:var(--primary);">1 Year</div><div class="stat-label">Sustained at Follow-Up</div><div class="stat-sub">Confirmed remission at 6-month &amp; 1-year</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLINICAL CHALLENGE -->
+<section class="challenge sec" id="challenge">
+  <div class="max-w">
+    <div class="sec-header fade-up">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <h2>The Clinical Challenge</h2>
+    </div>
+    <div class="challenge-grid fade-up">
+      <div>
+        <div class="col-title">Presenting Symptoms</div>
+        <p style="margin-bottom:1rem;font-size:0.875rem;">Patient presented with increasing difficulties with eating and body image, with symptom onset in 6th grade coinciding with puberty.</p>
+        <ul class="clist">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Binge eating 5-6x/week with self-induced vomiting up to 15-18 episodes/day</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Daily laxative use and compulsive exercise (up to 8 hours/day)</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Co-occurring depression, anxiety, trauma, suicidal ideation, daily self-harm</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Significant functional impairment: poor school attendance, college delayed, social isolation, family tension</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-title">Complicating Factors</div>
+        <ul class="clist">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>History of Chiari Malformation with decompression surgery at age 10</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>AI chatbot misuse for reassurance-seeking, calorie tracking, diet advice, &amp; body image distortion</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Family discord &mdash; parents disagree on treatment; police involvement in conflicts</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Nutritional deficiencies: fatigue, syncope, hair loss, amenorrhea. Medical complications including some parotid hypertrophy</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Prior treatment resistant &mdash; multiple outpatient, residential, inpatient rounds</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="severity-wrap fade-up">
+      <h4>DSM-5 Severity Classification &mdash; Self-Induced Vomiting Frequency</h4>
+      <div class="severity-bar">
+        <div class="sev-seg" style="background:#97aeaa;">Mild</div>
+        <div class="sev-seg" style="background:var(--ring);">Moderate</div>
+        <div class="sev-seg" style="background:var(--destructive);">Severe</div>
+        <div class="sev-seg" style="background:#8b3a2a;">Extreme</div>
+        <div class="severity-marker" style="left:92%;" data-label="This Patient"></div>
+      </div>
+      <div class="severity-legend"><span>1-3 episodes/wk</span><span>4-7 episodes/wk</span><span>8-13 episodes/wk</span><span>14+ episodes/wk</span></div>
+      <p style="font-size:0.8125rem;color:var(--fg);margin-top:0.75rem;"><strong style="color:var(--destructive);">Patient: 15-18 episodes/day</strong> &mdash; far exceeding the DSM-5 &ldquo;Extreme&rdquo; threshold of 14+ episodes per week. Combined with daily laxative abuse and up to 8 hrs/day compulsive exercise.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TREATMENT TIMELINE -->
+<section class="timeline-section sec" id="timeline">
+  <div class="max-w">
+    <div class="sec-header fade-up">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <h2 style="color:var(--secondary);">Treatment Journey &mdash; 13 Months</h2>
+    </div>
+    <p class="sec-desc fade-up">A phased approach moving from behavioural stabilization to cognitive restructuring to body image work.</p>
+    <div class="timeline fade-up">
+      <div class="tl-item"><div class="tl-dot" style="background:var(--secondary);"></div><div class="tl-phase" style="color:var(--secondary);">Months 1-3 &mdash; Phase 1</div><h4>Behavioural Containment &amp; Stabilization</h4><p>Established regular eating patterns, reduced medical risk from purging frequency, stabilized nutritional status. Collaborative formulation of maintaining factors.</p><span class="tl-tag" style="background:rgba(103,124,169,0.1);color:var(--secondary);">CBT-E Phase 1</span></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--chart-3);"></div><div class="tl-phase" style="color:var(--chart-3);">Months 4-7 &mdash; Phase 2</div><h4>Cognitive Restructuring &amp; Exposure</h4><p>Targeted overvaluation of shape/weight, core low self-esteem, and mood intolerance. In vivo and interoceptive exposure to break rigid dietary rules.</p><span class="tl-tag" style="background:rgba(103,124,169,0.1);color:var(--chart-3);">CBT-E Phase 2-3</span></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--ring);"></div><div class="tl-phase" style="color:var(--ring);">Months 8-11 &mdash; Phase 3</div><h4>Consolidation &amp; Relapse Prevention</h4><p>Maintained behavioural gains, addressed interpersonal difficulties, built distress tolerance, improved emotional regulation. Prepared for transition to targeted body image work.</p><span class="tl-tag" style="background:rgba(112,167,152,0.1);color:var(--ring);">CBT-E Phase 4</span></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--primary);"></div><div class="tl-phase" style="color:var(--primary);">Month 12-13 &mdash; Phase 4</div><h4>Mirror Exposure Therapy (Technology-Integrated)</h4><p>Prolonged guided body exposure, digital environment restructuring, graded social media re-engagement. Addressed AI chatbot misuse patterns.</p><span class="tl-tag" style="background:rgba(74,124,111,0.1);color:var(--primary);">MET + Digital Adaptations</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLINICAL REASONING TABS -->
+<section class="sec" id="reasoning" style="background:var(--bg);">
+  <div class="max-w fade-up">
+    <div class="sec-header">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+      <h2 style="color:var(--secondary);">Clinical Reasoning &amp; Approach</h2>
+    </div>
+    <p class="sec-desc">Explore each component of the integrated treatment protocol.</p>
+    <div class="tab-list" role="tablist">
+      <button class="tab-btn active" data-tab="formulation">Formulation</button>
+      <button class="tab-btn" data-tab="cbte">CBT-E</button>
+      <button class="tab-btn" data-tab="met">Mirror Exposure Therapy</button>
+      <button class="tab-btn" data-tab="adaptations">Treatment Adaptations</button>
+    </div>
+    <div class="tab-panel active" id="tab-formulation"><h3>Clinical Formulation</h3><p>The patient is a 18 y/o female presenting with severe Bulimia Nervosa, marked by high-frequency and intensity binge-purge behaviours and complicated by comorbid major Depressive Disorder, anxiety, trauma-related symptoms, and daily non-suicidal self-injury (NSSI). Her presentation reflects multifactorial etiology with a pathology rooted in complex interplay of vulnerabilities, such as symptom onset emerging in the context of puberty and premorbid placement in upper weight percentiles. This developmental context triggered an initially ego-syntonic pursuit of health-conscious eating that rapidly intensified into an intense fear of weight gain, pronounced overvaluation of shape and weight, extreme rigidity in dietary restriction, and severe compensatory behaviours. These patterns suggest early development of maladaptive core beliefs related to self-worth alongside environmental triggers and genetic predisposition (mother has history of AN-R) reinforcing behavioural inflexibility, and emotion dysregulation.</p><p style="margin-top:1rem;">Currently, the patient is in a severe restrict-binge-purge cycle driven both by psychological rigidity and physiological starvation. Severe caloric restriction (i.e: phobic avoidance of &ldquo;contaminated&rdquo; fats) trigger objective binge-eating episodes, which are subsequently neutralized through dangerous multi-modal compensatory behaviours including extreme self-induced vomiting (15-18x/day), daily laxative abuse, and compulsive over-exercise (up to 8 hours/day). This profound stage of malnourishment, neurobiological stress, and metabolic impairment actively sustains her pathology such as further destabilizing mood and amplifying intrusive suicidal ideation. Ultimately, the eating disorder and self-harm function together to modulate intense affect, which presents a complex clinical picture that requires an integrated intervention to rehabilitate nutritionally, disrupt the physiological behavioural cycle, and treat the underlying emotional dysregulation.</p></div>
+    <div class="tab-panel" id="tab-cbte"><h3>CBT-E (Enhanced Cognitive Behavioural Therapy)</h3><p>Primary intervention as it is the leading evidence-based intervention for Bulimia Nervosa. CBT-E directly targets the core maintaining psychopathology&mdash;overvaluation of shape, weight, and their control. Its trandiagnostic approach is well suited for this patient&rsquo;s clinical presentation, allowing for modular treatment of the maintaining mechanisms that cut across Patient&rsquo;s comorbid presentations: core low self-esteem, interpersonal difficulties, poor emotional regulation, and marked mood intolerance. CBT-E&rsquo;s 4 phase structure moving from establishing normalized eating to cognitive restructuring provides the containment this patient requires. Its emphasis on collaborative formulation fosters internal change essential for sustained recovery and long-term relapse prevention.</p></div>
+    <div class="tab-panel" id="tab-met"><h3>Mirror Exposure Therapy (MET)</h3><p>Mirror Exposure Therapy, thereafter &ldquo;MET&rdquo;, was strategically sequenced to follow the stabilization of eating behaviour and nutritional rehabilitation through completion of CBT-E treatment. MET requires a degree of cognitive flexibility and distress tolerance that is neurobiologically compromised during active starvation. Once the behavioural cycle was disrupted and Patient achieved medical and nutritional stability, MET was introduced to target the significant body image disturbance that persisted despite behavioural gains&mdash;especially given Patient&rsquo;s over-reliance on generative AI models and social media filters to reinforce negative body beliefs and avoidance behaviours. Through prolonged guided mirror exposure sessions, Patient systematically challenged the avoidance behaviours and attentional biases perpetuating distorted self-perception, gradually building tolerance for viewing her body without the distortions previously sustained by digital manipulation.</p></div>
+    <div class="tab-panel" id="tab-adaptations"><h3>Treatment Adaptations</h3><p>Early treatment prioritized behavioural containment&mdash;establishing regular eating, reducing medical risk from purging frequency, and stabilizing nutritional status&mdash;before any active cognitive or exposure work. Technology-integrated MET adaptations included having Patient take photos of self in session with neutral non-judgmental language, restructuring digital environment as response prevention by disabling image-editing and filter features, then graded exposure to posting unedited content&mdash;directly countering harmful AI chatbot and social media engagement patterns.</p></div>
+  </div>
+</section>
+
+<!-- MEASURED OUTCOMES -->
+<section class="measured sec" id="measured">
+  <div class="max-w">
+    <div class="sec-header fade-up"><h2>Measured Outcomes &amp; Impact</h2></div>
+    <p class="sec-desc fade-up">Standardized assessments and behavioural data demonstrating clinical progress across 13 months.</p>
+
+    <div class="chart-row fade-up">
+      <div class="chart-card">
+        <h3>Pre vs. Post Treatment Measures</h3>
+        <div class="chart-sub">Standardized assessment scores before and after 13-month treatment</div>
+        <div class="chart-canvas-wrap"><canvas id="outcomeBarChart" height="280"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Treatment Effectiveness Index</h3>
+        <div class="chart-sub">Composite effectiveness score across multiple outcome domains</div>
+        <div class="radial-wrap">
+          <svg id="radialChart" width="240" height="240" viewBox="0 0 240 240"></svg>
+          <div class="radial-legend" id="radialLegend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up" style="margin-bottom:2.5rem;">
+      <div class="chart-card">
+        <h3>Weekly Compensatory Behaviour Frequency</h3>
+        <div class="chart-sub">Tracking binge episodes, purge episodes, and excessive exercise hours over 52 weeks of treatment</div>
+        <div class="chart-canvas-wrap"><canvas id="behaviorAreaChart" height="300"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-row fade-up">
+      <div>
+        <h3 style="font-size:1rem;font-weight:600;margin-bottom:1.25rem;">Behavioural Frequency Reduction</h3>
+        <div class="toggle-wrap">
+          <span class="toggle-label">Show pre-treatment</span>
+          <button class="toggle-switch" id="behavToggle" onclick="toggleBehavior()"></button>
+          <span class="toggle-label">Show post-treatment</span>
+        </div>
+        <div class="behav-grid" id="behavGrid">
+          <div class="behav-card"><div class="behav-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="behav-before" data-pre="15-18x/day">15-18x/day</div><div class="arrow-down">&darr;</div><div class="behav-after" data-post="0">0</div><div class="behav-name">Self-Induced Vomiting</div></div>
+          <div class="behav-card"><div class="behav-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></div><div class="behav-before" data-pre="5-6x/week">5-6x/week</div><div class="arrow-down">&darr;</div><div class="behav-after" data-post="0">0</div><div class="behav-name">Binge Episodes</div></div>
+          <div class="behav-card"><div class="behav-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="behav-before" data-pre="Daily">Daily</div><div class="arrow-down">&darr;</div><div class="behav-after" data-post="0">0</div><div class="behav-name">Laxative Use</div></div>
+          <div class="behav-card"><div class="behav-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="behav-before" data-pre="8 hrs/day">8 hrs/day</div><div class="arrow-down">&darr;</div><div class="behav-after" data-post="Healthy">Healthy</div><div class="behav-name">Exercise</div></div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;font-weight:600;margin-bottom:1.25rem;">Functional Recovery Milestones</h3>
+        <ul class="ck-list">
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div><div class="ck-title">Weight Restoration</div><div class="ck-desc">144 lbs &rarr; 161 lbs (BMI 22.0 &rarr; 23.8)</div></div></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div><div class="ck-title">Full-Time School Return</div><div class="ck-desc">From poor attendance to full-time engagement</div></div></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div><div class="ck-title">Zero Returns to HLOC</div><div class="ck-desc">No higher-level-of-care admissions at 6-month &amp; 1-year follow-up</div></div></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div><div class="ck-title">Eating Pattern Normalized</div><div class="ck-desc">3 meals + 2-3 snacks daily; flexible food choices</div></div></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div><div class="ck-title">Digital Health Restored</div><div class="ck-desc">AI chatbot dependency &amp; harmful social media use resolved</div></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fade-up" style="margin-top:2rem;">
+      <div class="chart-card" style="text-align:center;">
+        <h3>Multi-Dimensional Improvement &mdash; Click dimensions to explore</h3>
+        <div class="chart-sub">Pre-treatment (outer, dashed) vs. Post-treatment (inner, filled) &mdash; lower is better</div>
+        <div style="display:flex;justify-content:center;margin:1.5rem 0;"><svg id="radarChart" width="320" height="320" viewBox="0 0 320 320"></svg></div>
+        <div id="radarInfo" style="font-size:0.875rem;min-height:2.5rem;color:rgba(255,255,255,0.85);transition:opacity 0.3s;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCALABLE INSIGHTS -->
+<section class="insights sec" id="insights">
+  <div class="max-w">
+    <div class="sec-header fade-up">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+      <h2>Scalable Insights for Digital Health</h2>
+    </div>
+    <p class="sec-desc fade-up">Clinical protocols and measurement approaches that could be systematized for scalable delivery in digital health platforms.</p>
+    <div class="fade-up">
+      <div class="info-tabs" role="tablist">
+        <button class="info-tab active" data-info="systematize">What Could Be Systematized</button>
+        <button class="info-tab" data-info="measure">What Measurement Could Scale</button>
+        <button class="info-tab" data-info="ecosystem">Measurement Ecosystem</button>
+        <button class="info-tab" data-info="build">What We Would Build</button>
+      </div>
+
+      <div class="info-panel active" id="info-systematize">
+        <p style="font-size:0.9rem;margin-bottom:1.5rem;">A sequenced CBT-E &rarr; MET protocol with readiness benchmarks built into a clinical decision support tool.</p>
+        <div class="proto-flow">
+          <div class="proto-step"><div class="proto-num">1</div><h4>CBT-E Foundation</h4><ul><li>Stabilize behaviours &amp; health</li><li>Normalize eating patterns</li><li>Cognitive restructuring</li></ul></div>
+          <svg class="proto-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <div class="proto-step"><div class="proto-num">2</div><h4>Readiness Benchmarks</h4><ul><li>Behavioural frequency</li><li>Cognitive flexibility</li><li>Distress tolerance</li></ul></div>
+          <svg class="proto-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <div class="proto-step"><div class="proto-num">3</div><h4>Mirror Exposure Therapy</h4><ul><li>Technology-integrated</li><li>Reproducible module</li><li>Graded exposure protocol</li></ul></div>
+        </div>
+        <div class="readiness-card">
+          <h4>Stepped-Care Readiness Algorithm &mdash; Click criteria to toggle readiness</h4>
+          <div class="r-items">
+            <div class="r-item" onclick="toggleR(this)"><div class="r-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="r-type" style="color:var(--destructive);">Behavioural</div><div class="r-desc">Compensatory behaviour frequency at target (&lt;2x/week for 4+ weeks)</div></div></div>
+            <div class="r-item" onclick="toggleR(this)"><div class="r-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="r-type" style="color:var(--secondary);">Cognitive</div><div class="r-desc">Flexibility indicators met (EDE-Q overvaluation subscale &lt;4.0)</div></div></div>
+            <div class="r-item" onclick="toggleR(this)"><div class="r-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="r-type" style="color:var(--primary);">Emotional</div><div class="r-desc">Distress tolerance within threshold (can tolerate 5+ min body exposure)</div></div></div>
+            <div class="r-item" onclick="toggleR(this)"><div class="r-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="r-type" style="color:var(--chart-5);">Nutritional</div><div class="r-desc">BMI stable in healthy range for 4+ consecutive weeks and consistent regular eating behaviours</div></div></div>
+          </div>
+          <div class="r-bar-wrap">
+            <div class="r-bar-label"><span>Readiness to Progress</span><span id="rPct">0%</span></div>
+            <div class="r-bar-track"><div class="r-bar-fill" id="rBar" style="width:0%"></div></div>
+            <p id="rStatus" style="font-size:0.8125rem;margin-top:0.5rem;color:var(--muted-fg);">Toggle criteria above to assess phase-transition readiness.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-panel" id="info-measure">
+        <p style="font-size:0.9rem;margin-bottom:1.5rem;">Multi-method tracking on an app. Insights for patients + Clarity for clinicians.</p>
+        <div class="mock-grid">
+          <div>
+            <h4 style="color:var(--secondary);font-weight:600;margin-bottom:1rem;font-size:0.9375rem;">Patient App Experience</h4>
+            <div class="app-mock">
+              <h5>Weekly Check-In</h5>
+              <div style="font-size:0.8125rem;margin-bottom:0.75rem;">How are you feeling this week?</div>
+              <div style="font-size:0.75rem;font-weight:600;color:var(--secondary);margin-bottom:0.5rem;">Log Behaviours &mdash; tap to toggle</div>
+              <div class="log-item"><span>Binge / Purge</span><div class="log-toggle" onclick="this.classList.toggle('checked')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+              <div class="log-item"><span>Laxative Use</span><div class="log-toggle" onclick="this.classList.toggle('checked')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+              <div class="log-item"><span>Exercise</span><div class="log-toggle" onclick="this.classList.toggle('checked')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+              <div class="log-item"><span>AI / Social Media</span><div class="log-toggle" onclick="this.classList.toggle('checked')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+            </div>
+          </div>
+          <div>
+            <h4 style="color:var(--secondary);font-weight:600;margin-bottom:1rem;font-size:0.9375rem;">Clinician Dashboard</h4>
+            <div class="dash-mock">
+              <div class="dash-row"><div class="dash-widget"><h5>Symptom Trends</h5><div style="height:30px;"><svg viewBox="0 0 120 30" width="100%" height="30"><polyline fill="none" stroke="var(--chart-3)" stroke-width="2" points="0,28 15,24 30,20 45,22 60,16 75,12 90,8 105,6 120,4"/><polyline fill="none" stroke="var(--chart-2)" stroke-width="2" stroke-dasharray="4,3" points="0,26 15,22 30,18 45,14 60,10 75,8 90,6 105,4 120,2"/></svg></div></div><div class="dash-widget"><h5>Behaviour Frequency</h5><div class="mini-chart" id="miniChart"></div></div></div>
+              <div class="dash-row"><div class="dash-widget"><h5>Readiness</h5><div style="display:flex;align-items:center;gap:0.5rem;"><div style="flex:1;height:8px;background:var(--muted);border-radius:999px;overflow:hidden;"><div style="width:72%;height:100%;background:var(--primary);border-radius:999px;"></div></div><span style="font-size:0.8125rem;font-weight:600;color:var(--primary);">72%</span></div></div><div class="dash-widget"><h5>Risk Alerts</h5><div style="display:flex;align-items:center;gap:0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--destructive)" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span style="font-size:0.8125rem;color:var(--destructive);font-weight:500;">Moderate</span></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-panel" id="info-ecosystem">
+        <h3 style="color:var(--secondary);font-weight:700;text-align:center;margin-bottom:0.5rem;">From Patient Input to Better Outcomes</h3>
+        <div class="pipeline">
+          <div class="pipe-step"><div class="pipe-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></div><h4>Patient Input</h4><div class="pipe-sub">(Weekly)</div><ul><li>EDE-Q, PHQ-9, EAT-40</li><li>Behaviour logs</li><li>Functional check-ins</li></ul><svg class="pipe-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-step"><div class="pipe-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h4>Integration</h4><div class="pipe-sub">(Automated)</div><ul><li>HIPAA-compliant</li><li>Real-time sync</li><li>Multi-source</li></ul><svg class="pipe-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-step"><div class="pipe-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div><h4>Dashboard</h4><div class="pipe-sub">(Longitudinal)</div><ul><li>Trend visualization</li><li>Readiness indicators</li><li>Risk flags</li></ul><svg class="pipe-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-step"><div class="pipe-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>Decision Support</h4><div class="pipe-sub">(Algorithm)</div><ul><li>Phase advancement</li><li>Escalation alerts</li><li>Stepped-care</li></ul><svg class="pipe-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-step"><div class="pipe-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><h4>Better Outcomes</h4><div class="pipe-sub">(Sustained)</div><ul><li>Timely adjustments</li><li>Reduced attrition</li><li>Stronger recovery</li></ul></div>
+        </div>
+      </div>
+
+      <div class="info-panel" id="info-build">
+        <div style="text-align:center;margin-bottom:1.5rem;"><h3 style="color:var(--primary);font-size:1.125rem;font-weight:700;">Adaptive, Technology-Integrated ED Treatment Protocol</h3><p style="font-size:0.875rem;color:var(--muted-fg);margin-top:0.375rem;">Patient-centered design with clinician-facing decision support</p></div>
+        <div class="build-layout">
+          <div class="build-col">
+            <h4 style="font-size:0.8125rem;font-weight:700;color:var(--secondary);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.5rem;">Intelligent Treatment Engine</h4>
+            <div class="b-item"><div class="b-icon" style="background:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><h5>Real-Time Data</h5><p>Symptom, behaviour, functioning</p></div></div>
+            <div class="b-item"><div class="b-icon" style="background:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></div><div><h5>Clinician Decisions</h5><p>Guided by evidence &amp; context</p></div></div>
+            <div class="b-item"><div class="b-icon" style="background:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div><h5>Adaptive Algorithm</h5><p>Adjusts focus + pacing and adapts exposure level</p></div></div>
+          </div>
+          <div class="center-hub">
+            <div class="hub-ring"><div class="hub-center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="hub-label">Patient</div><div class="hub-sub">Empowered + Supported</div></div></div>
+            <div class="spokes"><span class="spoke">Digital Assessment</span><span class="spoke">MET Interventions</span><span class="spoke">In-App Exposures</span><span class="spoke">Recovery Tasks</span><span class="spoke">Response Prevention</span><span class="spoke">Feedback Loop</span><span class="spoke">CBT-E Skills</span><span class="spoke">Mindfulness Exercises</span><span class="spoke">Distress Tolerance Activities</span></div>
+          </div>
+          <div class="build-col">
+            <h4 style="font-size:0.8125rem;font-weight:700;color:var(--secondary);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.5rem;">Clinician Command Center</h4>
+            <div class="b-item"><div class="b-icon" style="background:rgba(103,124,169,0.1);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div><div><h5>Live Dashboard</h5><p>Track progress &amp; trends</p></div></div>
+            <div class="b-item"><div class="b-icon" style="background:rgba(181,120,90,0.1);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--destructive)" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><h5>Risk Monitoring</h5><p>Flag escalation early</p></div></div>
+            <div class="b-item"><div class="b-icon" style="background:rgba(103,124,169,0.1);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div><h5>Readiness Signals</h5><p>Know when to advance phases</p></div></div>
+          </div>
+        </div>
+        <div class="impact-bar">
+          <div class="impact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><h5>Safer Care</h5><p>Early risk detection</p></div></div>
+          <div class="impact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg><div><h5>Smarter Care</h5><p>Data-driven decisions</p></div></div>
+          <div class="impact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div><h5>Stronger Engagement</h5><p>Between-session support</p></div></div>
+          <div class="impact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><div><h5>Sustained Recovery</h5><p>Long-term impact</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="max-w">
+    <p>Clinical case study demonstrating evidence-based eating disorder treatment</p>
+    <p class="disclaimer">This case study presents de-identified clinical data for educational and professional development purposes.</p>
+  </div>
+</footer>
+
+<script>
+/* Treatment Tabs */
+document.querySelectorAll('.tab-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('tab-' + b.dataset.tab).classList.add('active');
+  });
+});
+
+/* Infographic Tabs */
+document.querySelectorAll('.info-tab').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.info-tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.info-panel').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('info-' + b.dataset.info).classList.add('active');
+  });
+});
+
+/* Readiness Toggle */
+function toggleR(el) { el.classList.toggle('met'); updateR(); }
+function updateR() {
+  var items = document.querySelectorAll('.r-item');
+  var met = document.querySelectorAll('.r-item.met').length;
+  var pct = Math.round((met / items.length) * 100);
+  document.getElementById('rPct').textContent = pct + '%';
+  document.getElementById('rBar').style.width = pct + '%';
+  var s = document.getElementById('rStatus');
+  if (pct === 100) { s.textContent = 'All criteria met — Ready to progress to Mirror Exposure Therapy.'; s.style.color = 'var(--primary)'; s.style.fontWeight = '600'; }
+  else if (pct >= 50) { s.textContent = 'Approaching readiness — continue monitoring remaining criteria.'; s.style.color = 'var(--chart-2)'; s.style.fontWeight = '500'; }
+  else { s.textContent = 'Toggle criteria above to assess phase-transition readiness.'; s.style.color = 'var(--muted-fg)'; s.style.fontWeight = '400'; }
+}
+
+/* Behaviour Toggle */
+var behavOn = false;
+function toggleBehavior() {
+  behavOn = !behavOn;
+  document.getElementById('behavToggle').classList.toggle('on', behavOn);
+  document.querySelectorAll('.behav-card').forEach(function(c) {
+    var before = c.querySelector('.behav-before');
+    var after = c.querySelector('.behav-after');
+    var arrow = c.querySelector('.arrow-down');
+    if (behavOn) {
+      after.style.display = 'none'; arrow.style.display = 'none';
+      before.style.textDecoration = 'none'; before.style.fontSize = '1.25rem'; before.style.fontWeight = '800'; before.style.color = 'var(--destructive)'; before.style.opacity = '1';
+    } else {
+      after.style.display = ''; arrow.style.display = '';
+      before.style.textDecoration = 'line-through'; before.style.fontSize = ''; before.style.fontWeight = ''; before.style.color = ''; before.style.opacity = '';
+    }
+  });
+}
+
+/* Fade-up Observer */
+var obs = new IntersectionObserver(function(e) { e.forEach(function(x) { if (x.isIntersecting) { x.target.classList.add('visible'); obs.unobserve(x.target); } }); }, { threshold: 0.15 });
+document.querySelectorAll('.fade-up').forEach(function(el) { obs.observe(el); });
+
+/* Mini bar chart */
+var mc = document.getElementById('miniChart');
+if (mc) { [85,72,60,45,30,20,12,8,4,2].forEach(function(h, i) { var b = document.createElement('div'); b.className = 'mini-bar'; b.style.height = '0'; mc.appendChild(b); setTimeout(function() { b.style.height = h + '%'; }, 300 + i * 80); }); }
+
+/* Chart.js — Pre vs Post Grouped Bar Chart */
+(function() {
+  var ctx = document.getElementById('outcomeBarChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['EDE-Q', 'PHQ-9', 'EAT-40', 'BMI'],
+      datasets: [
+        { label: 'Pre-Treatment', data: [4.8, 21, 65, 22.0], backgroundColor: '#b5785a', borderRadius: 8, borderSkipped: false, barPercentage: 0.7, categoryPercentage: 0.6 },
+        { label: 'Post-Treatment', data: [3.6, 18, 38, 23.8], backgroundColor: '#4a7c6f', borderRadius: 8, borderSkipped: false, barPercentage: 0.7, categoryPercentage: 0.6 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { color: 'rgba(255,255,255,0.8)', font: { family: 'Inter', size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'rectRounded' } },
+        tooltip: { backgroundColor: '#fff', titleColor: '#7a746f', bodyColor: '#7a746f', borderColor: '#e0dbd4', borderWidth: 1, cornerRadius: 8, padding: 12, titleFont: { family: 'Inter', weight: '600' }, bodyFont: { family: 'Inter' } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.7)', font: { family: 'Inter', size: 12, weight: '500' } } },
+        y: { grid: { color: 'rgba(255,255,255,0.08)', drawBorder: false }, ticks: { color: 'rgba(255,255,255,0.6)', font: { family: 'Inter', size: 11 } }, beginAtZero: true }
+      }
+    }
+  });
+})();
+
+/* SVG — Treatment Effectiveness Radial */
+(function() {
+  var svg = document.getElementById('radialChart');
+  var legendEl = document.getElementById('radialLegend');
+  if (!svg || !legendEl) return;
+  var cx = 120, cy = 120, maxR = 105, minR = 15, barW = 20, gap = 3;
+  var data = [
+    { label: 'Symptom Reduction', value: 100, color: '#4a7c6f' },
+    { label: 'Functional Recovery', value: 95, color: '#70a798' },
+    { label: 'Quality of Life', value: 92, color: '#677ca9' },
+    { label: 'Cognitive Change', value: 85, color: '#97aeaa' }
+  ];
+  var n = data.length;
+  var rStep = (maxR - minR) / n;
+
+  data.forEach(function(d, i) {
+    var r = maxR - i * rStep - gap;
+    var bgCirc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    bgCirc.setAttribute('cx', cx); bgCirc.setAttribute('cy', cy); bgCirc.setAttribute('r', r);
+    bgCirc.setAttribute('fill', 'none'); bgCirc.setAttribute('stroke', 'rgba(255,255,255,0.08)');
+    bgCirc.setAttribute('stroke-width', barW); svg.appendChild(bgCirc);
+
+    var circ = 2 * Math.PI * r;
+    var arc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    arc.setAttribute('cx', cx); arc.setAttribute('cy', cy); arc.setAttribute('r', r);
+    arc.setAttribute('fill', 'none'); arc.setAttribute('stroke', d.color);
+    arc.setAttribute('stroke-width', barW); arc.setAttribute('stroke-linecap', 'round');
+    arc.setAttribute('stroke-dasharray', circ); arc.setAttribute('stroke-dashoffset', circ);
+    arc.setAttribute('transform', 'rotate(-90 ' + cx + ' ' + cy + ')');
+    arc.style.transition = 'stroke-dashoffset 1.5s ease';
+    arc.dataset.target = circ * (1 - d.value / 100);
+    arc.classList.add('radial-arc'); svg.appendChild(arc);
+
+    var labelAngle = -(d.value / 100) * 360 / 2;
+    var rad = (labelAngle - 90) * Math.PI / 180;
+    var lx = cx + r * Math.cos(rad), ly = cy + r * Math.sin(rad);
+    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', lx); text.setAttribute('y', ly);
+    text.setAttribute('text-anchor', 'middle'); text.setAttribute('dominant-baseline', 'middle');
+    text.setAttribute('fill', '#fff'); text.setAttribute('font-size', '11');
+    text.setAttribute('font-weight', '700'); text.setAttribute('font-family', 'Inter, sans-serif');
+    text.textContent = d.value + '%'; svg.appendChild(text);
+
+    var item = document.createElement('div'); item.className = 'radial-legend-item';
+    item.innerHTML = '<div class="radial-legend-dot" style="background:' + d.color + '"></div><div><div class="radial-legend-value" style="color:#fff;">' + d.value + '%</div><div class="radial-legend-text" style="color:rgba(255,255,255,0.7);">' + d.label + '</div></div>';
+    legendEl.appendChild(item);
+  });
+
+  var radialObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        svg.querySelectorAll('.radial-arc').forEach(function(arc, i) {
+          setTimeout(function() { arc.style.strokeDashoffset = arc.dataset.target; }, 200 + i * 150);
+        });
+        radialObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  radialObs.observe(svg.closest('.chart-card') || svg);
+})();
+
+/* Chart.js — Stacked Area: Behaviour Frequency */
+(function() {
+  var ctx = document.getElementById('behaviorAreaChart');
+  if (!ctx) return;
+  var data = [
+    { week: 'Wk 1', binge: 6, purge: 18, exercise: 56 },
+    { week: 'Wk 4', binge: 5, purge: 15, exercise: 48 },
+    { week: 'Wk 8', binge: 4, purge: 12, exercise: 40 },
+    { week: 'Wk 12', binge: 3, purge: 8, exercise: 30 },
+    { week: 'Wk 16', binge: 3, purge: 6, exercise: 24 },
+    { week: 'Wk 20', binge: 2, purge: 4, exercise: 18 },
+    { week: 'Wk 24', binge: 2, purge: 3, exercise: 14 },
+    { week: 'Wk 28', binge: 1, purge: 2, exercise: 10 },
+    { week: 'Wk 32', binge: 1, purge: 1, exercise: 7 },
+    { week: 'Wk 36', binge: 0, purge: 1, exercise: 4 },
+    { week: 'Wk 40', binge: 0, purge: 0, exercise: 2 },
+    { week: 'Wk 44', binge: 0, purge: 0, exercise: 1 },
+    { week: 'Wk 48', binge: 0, purge: 0, exercise: 0 },
+    { week: 'Wk 52', binge: 0, purge: 0, exercise: 0 }
+  ];
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map(function(d) { return d.week; }),
+      datasets: [
+        { label: 'Binge Episodes/wk', data: data.map(function(d) { return d.binge; }), borderColor: '#b5785a', backgroundColor: 'rgba(181,120,90,0.3)', fill: 'origin', tension: 0.4, pointRadius: 4, pointBackgroundColor: '#b5785a', pointBorderColor: '#fff', pointBorderWidth: 2, order: 3 },
+        { label: 'Purge Episodes/wk', data: data.map(function(d) { return d.purge; }), borderColor: '#677ca9', backgroundColor: 'rgba(103,124,169,0.3)', fill: 'origin', tension: 0.4, pointRadius: 4, pointBackgroundColor: '#677ca9', pointBorderColor: '#fff', pointBorderWidth: 2, order: 2 },
+        { label: 'Excessive Exercise (hrs/wk)', data: data.map(function(d) { return d.exercise; }), borderColor: '#70a798', backgroundColor: 'rgba(112,167,152,0.3)', fill: 'origin', tension: 0.4, pointRadius: 4, pointBackgroundColor: '#70a798', pointBorderColor: '#fff', pointBorderWidth: 2, order: 1 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top', labels: { color: 'rgba(255,255,255,0.8)', font: { family: 'Inter', size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { backgroundColor: '#fff', titleColor: '#7a746f', bodyColor: '#7a746f', borderColor: '#e0dbd4', borderWidth: 1, cornerRadius: 8, padding: 12, titleFont: { family: 'Inter', weight: '600' }, bodyFont: { family: 'Inter' } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: 'rgba(255,255,255,0.7)', font: { family: 'Inter', size: 11 }, maxRotation: 45 } },
+        y: { grid: { color: 'rgba(255,255,255,0.08)', drawBorder: false }, ticks: { color: 'rgba(255,255,255,0.6)', font: { family: 'Inter', size: 11 } }, beginAtZero: true, title: { display: true, text: 'Frequency per Week', color: 'rgba(255,255,255,0.6)', font: { family: 'Inter', size: 12 } } }
+      }
+    }
+  });
+})();
+
+/* SVG — Radar Chart */
+(function() {
+  var svg = document.getElementById('radarChart');
+  if (!svg) return;
+  var cx = 160, cy = 160, R = 120;
+  var dims = [
+    { name: 'Behavioural', pre: 0.95, post: 0.05, detail: 'Vomiting 15-18x/day \u2192 0; Binge 5-6x/wk \u2192 0; Laxative daily \u2192 0' },
+    { name: 'Cognitive', pre: 0.85, post: 0.15, detail: 'ED cognitions reduced 85%; EDE-Q overvaluation significantly decreased' },
+    { name: 'Physical', pre: 0.7, post: 0.2, detail: 'BMI 22.0 \u2192 23.8; Weight 144 \u2192 161 lbs; Nutritional status restored' },
+    { name: 'Functional', pre: 0.8, post: 0.1, detail: 'Return to full-time school; 0 returns to higher level of care' },
+    { name: 'Emotional', pre: 0.75, post: 0.35, detail: 'PHQ-9: 21 \u2192 18; Daily self-harm eliminated; Distress tolerance improved' },
+    { name: 'Body Image', pre: 0.9, post: 0.25, detail: 'MET successfully challenged perceptual distortion; AI chatbot dependency addressed' }
+  ];
+  var n = dims.length;
+  function getPoint(i, r) {
+    var angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+    return [cx + R * r * Math.cos(angle), cy + R * r * Math.sin(angle)];
+  }
+  [0.25, 0.5, 0.75, 1].forEach(function(r) {
+    var pts = []; for (var i = 0; i < n; i++) pts.push(getPoint(i, r).join(','));
+    var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    poly.setAttribute('points', pts.join(' ')); poly.setAttribute('fill', 'none');
+    poly.setAttribute('stroke', 'rgba(255,255,255,0.1)'); poly.setAttribute('stroke-width', '1'); svg.appendChild(poly);
+  });
+  for (var i = 0; i < n; i++) {
+    var pt = getPoint(i, 1);
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy); line.setAttribute('x2', pt[0]); line.setAttribute('y2', pt[1]);
+    line.setAttribute('stroke', 'rgba(255,255,255,0.1)'); line.setAttribute('stroke-width', '1'); svg.appendChild(line);
+  }
+  var prePts = dims.map(function(d, i) { return getPoint(i, d.pre).join(','); }).join(' ');
+  var prePoly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  prePoly.setAttribute('points', prePts); prePoly.setAttribute('fill', 'rgba(181,120,90,0.15)');
+  prePoly.setAttribute('stroke', 'var(--destructive)'); prePoly.setAttribute('stroke-width', '2');
+  prePoly.setAttribute('stroke-dasharray', '6,4'); svg.appendChild(prePoly);
+  var postPts = dims.map(function(d, i) { return getPoint(i, d.post).join(','); }).join(' ');
+  var postPoly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  postPoly.setAttribute('points', postPts); postPoly.setAttribute('fill', 'rgba(112,167,152,0.25)');
+  postPoly.setAttribute('stroke', 'var(--ring)'); postPoly.setAttribute('stroke-width', '2'); svg.appendChild(postPoly);
+  dims.forEach(function(d, i) {
+    var lp = getPoint(i, 1.18);
+    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', lp[0]); text.setAttribute('y', lp[1]);
+    text.setAttribute('text-anchor', 'middle'); text.setAttribute('dominant-baseline', 'middle');
+    text.setAttribute('fill', 'rgba(255,255,255,0.8)'); text.setAttribute('font-size', '11');
+    text.setAttribute('font-weight', '600'); text.setAttribute('font-family', 'Inter, sans-serif');
+    text.textContent = d.name; svg.appendChild(text);
+    var pp = getPoint(i, d.pre);
+    var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('cx', pp[0]); dot.setAttribute('cy', pp[1]); dot.setAttribute('r', '6');
+    dot.setAttribute('fill', 'var(--destructive)'); dot.setAttribute('stroke', '#fff'); dot.setAttribute('stroke-width', '2');
+    dot.style.cursor = 'pointer';
+    dot.addEventListener('click', function() { document.getElementById('radarInfo').innerHTML = '<strong>' + d.name + ':</strong> ' + d.detail; });
+    svg.appendChild(dot);
+    var qp = getPoint(i, d.post);
+    var dot2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot2.setAttribute('cx', qp[0]); dot2.setAttribute('cy', qp[1]); dot2.setAttribute('r', '6');
+    dot2.setAttribute('fill', 'var(--ring)'); dot2.setAttribute('stroke', '#fff'); dot2.setAttribute('stroke-width', '2');
+    dot2.style.cursor = 'pointer';
+    dot2.addEventListener('click', function() { document.getElementById('radarInfo').innerHTML = '<strong>' + d.name + ':</strong> ' + d.detail; });
+    svg.appendChild(dot2);
+  });
+  var legend = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  var r1 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  r1.setAttribute('x', 80); r1.setAttribute('y', 300); r1.setAttribute('width', 12); r1.setAttribute('height', 12); r1.setAttribute('rx', 2);
+  r1.setAttribute('fill', 'rgba(181,120,90,0.4)'); r1.setAttribute('stroke', 'var(--destructive)'); r1.setAttribute('stroke-width', '1'); legend.appendChild(r1);
+  var t1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t1.setAttribute('x', 96); t1.setAttribute('y', 310); t1.setAttribute('fill', 'rgba(255,255,255,0.7)');
+  t1.setAttribute('font-size', '10'); t1.setAttribute('font-family', 'Inter, sans-serif');
+  t1.textContent = 'Pre-treatment (severity)'; legend.appendChild(t1);
+  var r2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  r2.setAttribute('x', 210); r2.setAttribute('y', 300); r2.setAttribute('width', 12); r2.setAttribute('height', 12); r2.setAttribute('rx', 2);
+  r2.setAttribute('fill', 'rgba(112,167,152,0.4)'); r2.setAttribute('stroke', 'var(--ring)'); r2.setAttribute('stroke-width', '1'); legend.appendChild(r2);
+  var t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t2.setAttribute('x', 226); t2.setAttribute('y', 310); t2.setAttribute('fill', 'rgba(255,255,255,0.7)');
+  t2.setAttribute('font-size', '10'); t2.setAttribute('font-family', 'Inter, sans-serif');
+  t2.textContent = 'Post-treatment'; legend.appendChild(t2);
+  svg.appendChild(legend);
+})();
+</script>
+</body>
+</html>
